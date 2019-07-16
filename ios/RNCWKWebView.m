@@ -231,6 +231,8 @@ static NSURLCredential* clientAuthenticationCredential;
     }
 #endif
 
+    [_webView.configuration.preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
+
     [self addSubview:_webView];
     [self setHideKeyboardAccessoryView: _savedHideKeyboardAccessoryView];
     [self setKeyboardDisplayRequiresUserAction: _savedKeyboardDisplayRequiresUserAction];
@@ -398,7 +400,8 @@ static NSURLCredential* clientAuthenticationCredential;
         [_webView loadRequest:request];
     }
     else {
-        [_webView loadFileURL:request.URL allowingReadAccessToURL:request.URL];
+        NSURL *baseURL = [RCTConvert NSURL:_source[@"baseUrl"]];
+        [_webView loadFileURL:request.URL allowingReadAccessToURL:baseURL];
     }
 }
 
